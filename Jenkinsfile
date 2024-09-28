@@ -25,7 +25,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                  sh "mvn sonar:sonar -Dsonar.projectKey=Java-maven-project -Dsonar.projectName='Java-maven-project'"
+                  sh "mvn sonar:sonar"
             }
         }
       }
