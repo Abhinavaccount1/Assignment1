@@ -3,7 +3,11 @@ pipeline {
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
-        maven "Maven"
+        maven "maven"
+    }
+
+    environment {
+        SONARQUBE_Server = 'sonar'
     }
 
     stages {
@@ -22,10 +26,19 @@ pipeline {
                 sh 'mvn clean test install'
             }
           }
-        stage('Send artifact to nexus') {
+        stage('SonarQube Analysis') {
             steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'SNAPSHOT.', classifier: '', file: 'target/mvc_1.war', type: 'war']], credentialsId: 'nexus', groupId: 'vpro-maven-group', nexusUrl: '35.183.27.32:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'vprofile-snapshots', version: '1.2'
+                withSonarQubeEnv('sonar') {
+                  sh "mvn sonar:sonar -Dsonar.projectKey=Java-maven-project -Dsonar.projectName='Java-maven-project'"
             }
-          }
+        }
+      }
+        stage("Quality gate") {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+                }
+            }
     }
 }
