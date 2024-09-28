@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', 
-                    url: 'https://github.com/Abhinavaccount1/java_project.git'
+                    url: 'https://github.com/Abhinavaccount1/Assignment1.git'
             }
         }
         stage('Build') {
