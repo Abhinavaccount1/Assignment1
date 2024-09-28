@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    environment {
+    SONARQUBE_Server = 'sonar'
+    }
  
     stages {
         stage('Clone Repository') {
@@ -18,6 +22,19 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                  sh "mvn sonar:sonar -Dsonar.projectKey=Java-maven-project -Dsonar.projectName='Java-maven-project'"
+            }
+        }
+      }
+        stage("Quality gate") {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+                }
     }
  
     post {
