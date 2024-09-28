@@ -110,6 +110,6 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<finalName>mvc_1</finalName>
+		<finalName>calc</finalName>
 	</build>
 </project>
