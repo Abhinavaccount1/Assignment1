@@ -36,12 +36,11 @@ pipeline {
               }
                 }
     }
- 
+    }
     post {
         success {
             echo 'Build successful!'
         }
         
     }
-}
 }
